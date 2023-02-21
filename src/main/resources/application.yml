@@ -1,0 +1,55 @@
+camunda.bpm.admin-user:
+  id: admin
+  password: admin
+
+### Camunda Job Execution
+camunda:
+  bpm:
+    job-execution:
+      enabled: true
+      deployment-aware: false
+      core-pool-size: 5
+      keep-alive-seconds: 60
+      lock-time-in-millis: 300000
+      max-jobs-per-acquisition: 5
+      max-pool-size: 10
+      queue-capacity: 10
+      wait-time-in-millis: 2500
+      max-wait: 5000
+      backoff-time-in-millis: 2000
+      max-backoff: 4000
+      backoff-decrease-threshold: 100
+      wait-increase-factor: 2
+    database:
+      type: postgres
+      schema-update: true
+    history-level: FULL
+    history-level-default: AUDIT
+    default-number-of-retries: 4
+    generic-properties:
+      properties:
+        historyCleanupBatchSize: 500
+        historyRemovalTimeStrategy: end
+        batchOperationHistoryTimeToLive: P90D
+        historyTimeToLive: P90D
+
+### Workaround for spring-boot 2.1.x
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  ### Configure jackson globally
+  jackson:
+    default-property-inclusion: non_null
+  ### Postgres
+  profiles:
+    active: dev
+  jpa:
+    generate-ddl: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          time_zone: UTC
